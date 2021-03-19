@@ -62,7 +62,6 @@ const Validate = (validationType: 'login' | 'create' | 'update') => {
         default:
           schema = createSchema
       }
-      console.log(req.body)
       const { error, value } = schema.validate(req.body, options)
       if (error) {
         // on fail return comma separated errors
