@@ -1,0 +1,94 @@
+{
+    "env": {
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:import/typescript",
+        "airbnb-base",
+        "plugin:prettier/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    ],
+    "plugins": ["@typescript-eslint"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module",
+        "project": "./tsconfig.json",
+        "tsconfigRootDir": "./"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+            },
+            "typescript": {}
+        }
+    },
+    "rules": {
+        "no-console": "off",
+        "no-shadow": "off",
+        "no-unused-vars": "off",
+        "semi": ["error", "never"],
+        // indent: [2, 'tab'],
+        "consistent-return": "off",
+        "no-trailing-spaces": "error",
+        "no-irregular-whitespace": "error",
+        "comma-dangle": ["off", "always-multiline"],
+        "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+        "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0, "maxBOF": 0 }],
+        "max-len": [
+            "error",
+            {
+                "code": 140,
+                "ignoreUrls": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreStrings": true,
+                "ignoreComments": true
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": ["src/development/*"]
+            }
+        ],
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-misused-promises": "off",
+        "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": 1,
+        "@typescript-eslint/no-inferrable-types": [
+            "warn",
+            {
+                "ignoreParameters": true
+            }
+        ],
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
+
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto",
+                "tabWidth": 2,
+                "semi": false,
+                "trailingComma": "es5",
+                "singleQuote": true
+                // "printWidth": 140
+            }
+        ]
+    }
+}

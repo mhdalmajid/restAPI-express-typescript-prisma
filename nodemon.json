@@ -1,0 +1,6 @@
+{
+    "watch": ["."],
+    "ext": "ts, js",
+    "exec": "node -r dotenv/config -r  tsconfig-paths/register -r ts-node/register src/server.ts",
+    "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules"]
+}

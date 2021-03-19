@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "baseUrl": ".",
+        "target": "esnext",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        // "pretty": true /* Stylize errors and messages using color and context. */,
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "resolveJsonModule": true,
+        "importHelpers": true,
+        // "experimentalDecorators": true,
+        // "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        // "typeRoots": ["node_modules/@types", "src/types"],
+        "paths": {
+            // "*": ["node_modules/*", "src/types/*"],
+            "@config/*": ["src/config/*"],
+            "@models/*": ["src/models/*"],
+            "@routes/*": ["src/routes/*"],
+            "@helpers/*": ["src/utils/*"],
+            "@middleware/*": ["src/middleware/*"],
+            "@controllers/*": ["src/controllers/*"]
+        }
+    },
+    "include": ["src/**/*", "prisma/**/*"],
+    "exclude": ["build"]
+}

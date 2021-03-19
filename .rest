@@ -1,0 +1,25 @@
+http://localhost:3000/
+
+###
+POST http://localhost:3000/user/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "hamodey85@gmail.com",
+    "password": "hamodey85"
+}
+###
+
+GET  http://localhost:3000/user/logout HTTP/1.1
+
+
+###
+
+POST http://localhost:3000/user/create HTTP/1.1
+content-type: application/json
+
+{
+    "email": "hamodey85@gmail.com",
+    "password": "hamodey85",
+    "repeat_password":"hamodey85"
+}
