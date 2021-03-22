@@ -40,10 +40,10 @@ router.post('/login', async (req, res, next) => {
     const rtoken = await createToken({ user, expiresIn: '7d' })
 
     res.cookie('jwt', rtoken.token, {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production',
       // sameSite: true,
       // signed: true,
-      expires: new Date(Date.now() + ms('7d')),
+      maxAge: 900000,
       secure: process.env.NODE_ENV === 'production',
     })
     return res.json({ token })
@@ -67,12 +67,23 @@ router.get('/profile', authenticate('jwt', { session: false }), (req, res, next)
 
 router.get('/profileByCookie', authenticate('jwtCookie', { session: false }), (req, res, next) => {
   res.json({
-    message: 'You made it to the secure route',
-    user: req.user,
-    token: req.query.secret_token,
-    now: Date.now(),
+    message: 'using cookie token',
   })
 })
+
+router.get(
+  '/rtoken',
+  (req, res, next) => {
+    authenticate('jwt', { session: false }, (err, user, info) => {
+      authenticate('jwtCookie', { session: false })(req, res, next)
+    })(req, res, next)
+  },
+  (req, res, next) => {
+    res.json({
+      message: 'using 2 Strategy',
+    })
+  }
+)
 
 router.get('/logout', (req: RequestCookie<{ jwt: string }>, res) => {
   if (req.cookies && req.cookies.jwt) {

@@ -57,14 +57,13 @@ const JWTCookieOptions = {
 passport.use(
   'jwtCookie',
   new JwtStrategy(JWTCookieOptions, async (jwtPayload: JWTpayload, done: VerifiedCallback) => {
-    console.log(jwtPayload.sub)
     try {
       const user = await UserModel.findUnique({ where: { id: jwtPayload.sub.id } })
 
       if (!user) return done(null, false)
 
-      const payload = {
-        user: { id: user.id, role: user.role === 'ADMIN' },
+      const payload: JWTpayload = {
+        sub: { id: user.id, role: user.role === 'ADMIN' },
         iat: Date.now(),
       }
       return done(null, payload)

@@ -24,7 +24,8 @@ const createToken: tokenGenerator = ({ user, expiresIn }) => {
   // const token = jsonwebtoken.sign(payload, secret)
 
   const data = {
-    token: `Bearer ${token}`,
+    token,
+    Bearer: `Bearer ${token}`,
     expires: expiresIn,
   }
   return Promise.resolve(data)
