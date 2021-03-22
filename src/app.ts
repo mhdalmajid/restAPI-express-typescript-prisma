@@ -8,9 +8,11 @@ import boom, { badRequest, boomify } from '@hapi/boom'
 import router from '@routes/index.routes'
 import swaggerUi from 'swagger-ui-express'
 import { logger, morganMiddleware } from 'src/lib/Logger'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
-// import { passportConfig } from './lib/auth/passport'
-import { SESSION_OPTIONS } from '@config/session'
+import { SESSION_OPTIONS } from 'src/lib/config/session'
+import UserModel from '@models/User/Model'
+import passport from './lib/auth/passport'
 import { store } from './lib/Redis'
 import swaggerDocument from './swagger.def'
 import { ErrorHandler } from './coreApp'
@@ -18,8 +20,14 @@ import { ErrorHandler } from './coreApp'
 const AppInit = () => {
   const app = express()
 
-  app.set('views', path.resolve(__dirname, 'views'))
+  /** *****************
+   *      Logger
+   *   Use just in dev
+   * ******************
+   */
+  app.use(morganMiddleware)
 
+  app.set('views', path.resolve(__dirname, 'views'))
   app.disable('x-powered-by')
   app.use(helmet())
 
@@ -53,31 +61,34 @@ const AppInit = () => {
    *   using Redis Store
    * ******************
    */
-
-  app.use(session({ ...SESSION_OPTIONS, store }))
-  app.use((req, res, next) => {
-    if (!req.session) {
-      return next(new Error('session lost connecting')) // handle error
-    }
-    next()
-  })
+  app.use(cookieParser(process.env.cookieParserSecret))
+  // app.use(session({ ...SESSION_OPTIONS, store }))
+  // app.use((req, res, next) => {
+  //   if (!req.session) {
+  //     return next(new Error('session lost connecting')) // handle error
+  //   }
+  //   next()
+  // })
   /** *****************
    *   AUTH initialize
    *   Using Passportjs
    * ******************
    */
-  // app.use(passportConfig.initialize())
-  // app.use(passportConfig.session())
+  app.use(passport.initialize())
+  passport.serializeUser<any, any>((req, user, done) => {
+    done(undefined, user)
+  })
+
+  passport.deserializeUser(async (id, done) => {
+    UserModel.findUnique({ where: { id: +id } })
+      .then((user) => done(false, user.id))
+      .catch((err) => done(err, false))
+  })
+
   // app.use((req, res, next) => {
   //   res.locals.user = req.user
   //   next()
   // })
-  /** *****************
-   *      Logger
-   *   Use just in dev
-   * ******************
-   */
-  app.use(morganMiddleware)
 
   /** *****************
    *  swaggerUi initialize

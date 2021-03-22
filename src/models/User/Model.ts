@@ -1,5 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client'
-import { hash } from 'bcryptjs'
+import { Prisma, PrismaClient, User as UserClient } from '@prisma/client'
+import { compare, hash } from 'bcryptjs'
 
 interface IUser {
   email: string
@@ -12,57 +12,55 @@ interface IUser {
   updatedAt?: Date
   createdAt?: Date
 }
+interface UserModelHooks {
+  isValidPassword: (password: string, hashed: string) => Promise<boolean>
+}
+
+interface UserModel extends UserModelHooks, Prisma.UserDelegate<Prisma.RejectOnNotFound | Prisma.RejectPerOperation> {}
 
 const db = new PrismaClient()
+const User = db.user
+const UserModel = User as UserModel
 
-const getById = async (id: number, includePassword = false) => {
-  const user = await db.user.findUnique({
-    where: {
-      id,
-    },
-  })
-  if (includePassword) delete user.password
-  return user
-}
+UserModel.isValidPassword = async (password: string, hashed: string) => compare(password, hashed)
 
-const getByEmail = async (email: string, includePassword = true) => {
-  const user = await db.user.findUnique({
-    where: {
-      email,
-    },
-  })
-  if (!includePassword) delete user.password
-  return user
-}
+// const UserModel = {
+//   findOne: User.findUnique.bind(User),
+//   findUnique: User.findUnique.bind(User),
+//   update: User.update.bind(User),
+//   findById: async (id: number, includePassword = false) => {
+//     const user = await User.findUnique({
+//       where: {
+//         id,
+//       },
+//     })
+//     if (includePassword) delete user.password
+//     return user
+//   },
+//   findByEmail: async (email: string, includePassword = true) => {
+//     const user = await User.findUnique({
+//       where: {
+//         email,
+//       },
+//     })
+//     if (!includePassword) delete user.password
+//     return user
+//   },
+//   create: async ({ email, password, name = '' }: IUser) => {
+//     const id = await User.create({
+//       data: {
+//         email,
+//         password: await hash(password, 10),
+//         name,
+//       },
+//       select: { id: true },
+//     })
+//     return id
+//   },
 
-const create = async ({ email, password, name = '' }: IUser) => {
-  const id = await db.user.create({
-    data: {
-      email,
-      password: await hash(password, 10),
-      name,
-    },
-    select: { id: true },
-  })
-  return id
-}
+//   isValidPassword: async (password: string, hashed: string) => {
+//     return compare(password, hashed)
+//   },
+// }
 
-const update = async (where: Prisma.UserWhereUniqueInput, data: {}) => {
-  const id = await db.user.update({
-    where,
-    data,
-    select: {
-      id: true,
-    },
-  })
-  return id
-}
-
-const UserModel = {
-  db,
-  getById,
-  create,
-  update,
-  getByEmail,
-}
 export default UserModel

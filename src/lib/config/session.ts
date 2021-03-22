@@ -1,5 +1,5 @@
 import { IS_PROD } from './app'
-import { THIRTY_MINUTES } from '../lib/time'
+import { THIRTY_MINUTES } from '../time'
 
 const {
   SESSION_SECRET = 'plkeepethis ase %&this , masecrette',

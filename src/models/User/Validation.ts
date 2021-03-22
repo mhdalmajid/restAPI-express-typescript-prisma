@@ -1,7 +1,7 @@
 import { RequestHandler, Request, Response, NextFunction, Router } from 'express'
 import Joi from 'joi'
 import { badRequest } from '@hapi/boom'
-import { IUser } from './IUser'
+import { User } from '@prisma/client'
 
 interface LoginRequest<T> extends Request {
   body: T
@@ -44,8 +44,8 @@ const createSchema = schema.with('password', 'confirmPassword').messages({ any: 
 const updateSchema = schema.with('password', 'confirmPassword').tailor('update')
 const loginSchema = schema.tailor('login')
 
-const Validate = (validationType: 'login' | 'create' | 'update') => {
-  return (req: LoginRequest<IUser>, res: Response, next: NextFunction) => {
+const Validate = (validationType: 'login' | 'signup' | 'update') => {
+  return (req: LoginRequest<User>, res: Response, next: NextFunction) => {
     try {
       let schema: Joi.Schema
 
@@ -53,7 +53,7 @@ const Validate = (validationType: 'login' | 'create' | 'update') => {
         case 'login':
           schema = loginSchema
           break
-        case 'create':
+        case 'signup':
           schema = createSchema
           break
         case 'update':
