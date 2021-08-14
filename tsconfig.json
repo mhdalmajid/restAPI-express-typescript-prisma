@@ -1,31 +1,69 @@
 {
+    "ts-node": {
+        "files": true
+    },
     "compilerOptions": {
-        "outDir": "build",
-        "baseUrl": ".",
-        "target": "esnext",
+        "target": "es6",
         "module": "commonjs",
-        "moduleResolution": "node",
+        "pretty": true,
         "sourceMap": true,
-        // "pretty": true /* Stylize errors and messages using color and context. */,
-        "esModuleInterop": true,
-        "noImplicitAny": true,
-        "allowJs": true,
-        "resolveJsonModule": true,
+        "outDir": "dist",
         "importHelpers": true,
+        "incremental": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        /* Strict Type-Checking Options */
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        /* Module Resolution Options */
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        /* Experimental Options */
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "allowSyntheticDefaultImports": true,
-        // "typeRoots": ["node_modules/@types", "src/types"],
+
+        "forceConsistentCasingInFileNames": true,
+        "typeRoots": ["./node_modules/@types", "./src/core/types"],
+        "lib": [
+            "es5",
+            "es6",
+            "es2015.core",
+            "es2015.collection",
+            "es2015.generator",
+            "es2015.iterable",
+            "es2015.promise",
+            "es2015.proxy",
+            "es2015.reflect",
+            "es2015.symbol",
+            "es2015.symbol.wellknown",
+            "esnext.asynciterable"
+        ],
         "paths": {
             // "*": ["node_modules/*", "src/types/*"],
-            "@config/*": ["src/lib/config/*"],
+            "@core/*": ["src/core/*"],
+            "@auth/*": ["src/auth/*"],
             "@models/*": ["src/models/*"],
-            "@routes/*": ["src/routes/*"],
             "@helpers/*": ["src/utils/*"],
+            "@service/*": ["src/service/*"],
+            "@types/*": ["src/core/types/*"],
+            "@config/*": ["src/core/config/*"],
+            "@routes/*": ["src/controllers/*"],
+            "@validation/*": ["src/validation/*"],
             "@middleware/*": ["src/middleware/*"],
             "@controllers/*": ["src/controllers/*"]
         }
     },
-    "include": ["src/**/*", "prisma/**/*"],
-    "exclude": ["build"]
+    "include": ["src/**/*", "prisma/**/*", "test"],
+    "exclude": ["build", "test/**/*.ts"]
 }
